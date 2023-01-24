@@ -1,0 +1,29 @@
+{
+  "name": "saucy",
+  "description": "hello!!",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SammyDartnall10/saucey.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.12.0",
+    "got": "^12.5.3",
+    "graphql": "^16.6.0",
+    "mercurius": "^11.5.0"
+  },
+  "bugs": {
+    "url": "https://github.com/SammyDartnall10/saucey/issues"
+  },
+  "homepage": "https://github.com/SammyDartnall10/saucey#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
