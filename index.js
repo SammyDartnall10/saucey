@@ -39,7 +39,7 @@ const resolvers = {
 
 const driver = neo4j.driver(
   "bolt://localhost:7687",
-  neo4j.auth.basic("neo4j", "saucydatabase")
+  neo4j.auth.basic("neo4j", process.env.NEO_PASSWORD)
 );
 
 const neoSchema = new Neo4jGraphQL({ typeDefs, driver });

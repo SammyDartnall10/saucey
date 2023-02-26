@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon -r dotenv/config index.js dotenv_config_path=./config/dev.env dotenv_config_debug=true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@neo4j/graphql": "^3.17.0",
+    "dotenv": "^16.0.3",
     "fastify": "^4.12.0",
     "got": "^11.8.3",
     "graphql": "^16.6.0",
