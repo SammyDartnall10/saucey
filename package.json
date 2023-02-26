@@ -14,10 +14,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@neo4j/graphql": "^3.17.0",
     "fastify": "^4.12.0",
     "got": "^11.8.3",
     "graphql": "^16.6.0",
-    "mercurius": "^11.5.0"
+    "mercurius": "^11.5.0",
+    "neo4j-driver": "^5.6.0"
   },
   "bugs": {
     "url": "https://github.com/SammyDartnall10/saucey/issues"
