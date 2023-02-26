@@ -14,9 +14,14 @@ const typeDefs = `
     name: String! 
     maker: String!
     location: String! 
+    createdBy: [User!]! @relationship(type:"ADDED_SAUCE", direction: IN, properties:"AddedSauce")
   }
   type User {
     name: String
+    sauces: [Sauce!]! @relationship(type:"ADDED_SAUCE", direction: OUT,properties:"AddedSauce")
+  }
+  interface AddedSauce @relationshipProperties {
+    roles: [String]
   }
   
 `;
