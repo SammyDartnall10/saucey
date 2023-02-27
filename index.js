@@ -1,10 +1,11 @@
-const { Neo4jGraphQL } = require("@neo4j/graphql");
+// const Fastify = require('fastify');
 const Fastify = require('fastify');
 const mercurius = require('mercurius');
-const neo4j = require("neo4j-driver");
+const { getDriver, initDriver } = require('./server/neo4j')
 const { getSauces } = require('./lib/getSauces');
+const { addSauces } = require('./lib/addSauces');
 
-const typeDefs = `
+const schema = `
   type Query {
     hello(name: String): String!
     sauce(name: String): [Sauce]
@@ -13,57 +14,53 @@ const typeDefs = `
   type Sauce {
     name: String! 
     maker: String!
-    location: String! 
-    createdBy: [User!]! @relationship(type:"ADDED_SAUCE", direction: IN, properties:"AddedSauce")
+    location: String
+    createdBy: [User]
   }
   type User {
     name: String
-    sauces: [Sauce!]! @relationship(type:"ADDED_SAUCE", direction: OUT,properties:"AddedSauce")
+    sauces: [Sauce]
   }
-  interface AddedSauce @relationshipProperties {
-    roles: [String]
+  input addSauce {
+    name: String! 
+    maker: String!
+    location: String
+    createdBy: [addUser]
   }
-  
+  input addUser {
+    name: String
+    sauces: [addSauce]
+  }
+  type Mutation {
+    addSauce(params: addSauce!): Sauce
+  }
 `;
 
 const resolvers = {
   Query: {
     hello: async (_, { args }, { context }, info) => `hello world'}`,
-    // sauce: async (_, { url }) => getSauces(),
     sauce: async (_, { name }, { context }, info) => getSauces(name),
-    user: () => `Hi Sammy`
+    user: async () => `Hi Sammy`
+  },
+  Mutation: {
+    addSauce: async (_, { params }) => addSauces(params)
   },
 };
 
 
+initDriver(process.env.DATABASE_URI, process.env.NEO_USER, process.env.NEO_PASSWORD)
 
-const driver = neo4j.driver(
-  "bolt://localhost:7687",
-  neo4j.auth.basic("neo4j", process.env.NEO_PASSWORD)
-);
+const app = Fastify();
+app.register(mercurius, {
+  schema,
+  resolvers,
+  graphiql: true,
+  // context() {
+  //   // dbstuff
+  // },
+});
 
-const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
-
-neoSchema.getSchema().then((schema) => {
-  // const server = new ApolloServer({
-  //     schema,
-  // });
-
-  const server = Fastify();
-  server.register(mercurius, {
-    schema,
-    resolvers,
-    graphiql: true,
-    // context() {
-    //   // dbstuff
-    // },
-  });
-
-  server.listen(3000).then(() => {
-    console.log(`🚀 Server ready at port 3000`);
-  });
-
-})
-
-// app.listen(3000);
+app.listen(3000).then(() => {
+  console.log(`🚀 Server ready at port 3000`);
+});
 
